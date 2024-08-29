@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
-    "test": "test"
+    "build": "node-gyp configure build"
   },
   "repository": {
     "type": "git",
@@ -16,5 +15,8 @@
     "url": "https://github.com/Siqius/mouse-controller-node-addon/issues"
   },
   "homepage": "https://github.com/Siqius/mouse-controller-node-addon#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "node-gyp": "^10.2.0"
+  }
 }
