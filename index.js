@@ -1,3 +1,5 @@
 const addon = require("./build/Release/addon");
 
-console.log(addon.click());
+for(let i = 0; i<1; i++) {
+  console.log(addon.click(button="left"));
+}

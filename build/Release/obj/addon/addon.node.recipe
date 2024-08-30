@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Mouse controller node package\build\Release\addon.node</FullPath>
+      <FullPath>C:\vsc\node addon\build\Release\addon.node</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

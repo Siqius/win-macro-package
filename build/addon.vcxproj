@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{186C7C84-D76B-A1EF-F9C1-18D70A3CE8D6}</ProjectGuid>
+    <ProjectGuid>{DD1CAF1A-2D8C-0612-0FA7-86B6D397E39B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>addon</RootNamespace>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
@@ -140,7 +140,7 @@
     <ClCompile Include="..\mouseController.cpp">
       <ObjectFileName>$(IntDir)\mouseController.obj</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="C:\Mouse controller node package\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
+    <ClCompile Include="C:\Users\adam.stromberg1\AppData\Roaming\nvm\v22.6.0\node_modules\npm\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets"/>

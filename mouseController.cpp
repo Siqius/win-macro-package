@@ -12,25 +12,15 @@ using v8::Value;
 
 void Click(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
-  bool pos = false;
-  INPUT inputs[4] = {};
-  ZeroMemory(inputs, sizeof(inputs));
-
-  inputs[0].type = INPUT_MOUSE;
-  inputs[0].ki.wVk = VK_LEFT;
-  inputs[0].ki.dwFlags = MOUSEEVENTF_LEFTDOWN;
-
-  UINT uSent = SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
-
-  args.GetReturnValue().Set(1);
-
   /*
-  if (args.Length() > 3 || args.Length() < 1) {
+  if (args.Length() > 3 || args.Length() < 1 || args.Length() == 2) {
     isolate->ThrowException(Exception::TypeError(
         String::NewFromUtf8(isolate,
                             "Wrong number of arguments").ToLocalChecked()));
     return;
   }
+  bool pos = false;
+  DWORD moveParam;
   if(args.Length() == 3) { 
     if (!args[1]->IsNumber() || !args[2]->IsNumber()) {
       isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong arguments").ToLocalChecked()));
@@ -39,11 +29,25 @@ void Click(const FunctionCallbackInfo<Value>& args) {
     pos = true;
   }
 
+  INPUT input;
+  input.type=INPUT_MOUSE;
+  if(pos) {
+    input.mi.dx = args[1];
+    input.mi.dy = args[2];
+    moveParam = MOUSEEVENT_MOVE;
+  }
+  input.mi.dwFlags=(MOUSEEVENTF_LEFTDOWN|moveParam|MOUSEEVENTF_LEFTUP);
+  input.mi.time=0;
+  SendInput(1,&input,sizeof(INPUT));
+
+  */
+  args.GetReturnValue().Set(args);
+  /*
+
   double value =
       args[0].As<Number>()->Value() + args[1].As<Number>()->Value();
   Local<Number> num = Number::New(isolate, value);
 
-  args.GetReturnValue().Set(num);
   */
 }
 
