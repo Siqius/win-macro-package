@@ -1,12 +1,11 @@
 const addon = require("./build/Release//mouse-controller.node");
-let button;
-let delay;
-let move;
-let x;
-let y;
+let button = "right";
+let delay = "200";
+let move = "true";
+let x = "200";
+let y = "200";
 let params = JSON.stringify({
   "button": button,
-  "delay": delay,
   "move": move,
   "x": x,
   "y": y

@@ -22,33 +22,36 @@ void Click(const FunctionCallbackInfo<Value>& args) {
   v8::String::Utf8Value str(isolate, args[0]);
   std::string cppStr(*str);
   json jsons = json::parse(cppStr);
+
   std::string button = jsons.value("button", "left");
-  std::string delay = jsons.value("delay", "100");
-  cout << button << endl;
-  cout << delay << endl;
-}
-  /*
-  bool pos = false;
-  DWORD moveParam;
-  if(args.Length() == 3) { 
-    if (!args[1]->IsNumber() || !args[2]->IsNumber()) {
-      isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong arguments").ToLocalChecked()));
-      return;
-    }
-    pos = true;
-  }
+  std::string movestr = jsons.value("move", "false");
+  bool move;
+  istringstream(movestr) >> std::boolalpha >> move;
 
   INPUT input;
+  DWORD moveParam = MOUSEEVENTF_ABSOLUTE;
+  DWORD mousedown;
+  DWORD mouseup;
   input.type=INPUT_MOUSE;
-  if(pos) {
-    input.mi.dx = args[1];
-    input.mi.dy = args[2];
-    moveParam = MOUSEEVENT_MOVE;
+  if(move) {
+    input.mi.dx = (65535 / GetSystemMetrics (SM_CXSCREEN)) * stoi(jsons.value("x","200"));
+    input.mi.dy = (65535 / GetSystemMetrics (SM_CXSCREEN)) * stoi(jsons.value("y","200"));
+    cout << input.mi.dy << endl;
+    moveParam = MOUSEEVENTF_MOVE;
   }
-  input.mi.dwFlags=(MOUSEEVENTF_LEFTDOWN|moveParam|MOUSEEVENTF_LEFTUP);
-  input.mi.time=100;
+  if(button == "right") {
+    mousedown = MOUSEEVENTF_RIGHTDOWN;
+    mouseup = MOUSEEVENTF_RIGHTUP;
+  }else {
+    mousedown = MOUSEEVENTF_LEFTDOWN;
+    mouseup = MOUSEEVENTF_LEFTUP;
+  }
+  input.mi.dwFlags=(MOUSEEVENTF_ABSOLUTE|moveParam|mousedown|mouseup);
+  input.mi.time = 0;
+  input.mi.mouseData = 0;
+  input.mi.dwExtraInfo = NULL;
   SendInput(1,&input,sizeof(INPUT));
-  */
+}
 
 
 void Initialize(v8::Local<v8::Object> exports) {
