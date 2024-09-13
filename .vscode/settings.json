@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "vector": "cpp",
+    "chrono": "cpp",
+    "optional": "cpp",
+    "system_error": "cpp",
+    "ostream": "cpp",
+    "ios": "cpp",
+    "sstream": "cpp",
+    "string": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "disabled"
+}
