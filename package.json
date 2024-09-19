@@ -2,8 +2,9 @@
   "name": "mouse-controller-node-package",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "build": "node-gyp configure build"
+    "build": "node-gyp clean configure build"
   },
   "repository": {
     "type": "git",

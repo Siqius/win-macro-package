@@ -1,0 +1,14 @@
+{
+  "macro": [
+    {
+      "inputType": "mouse",
+      "button": "left",
+      "type": "press",
+      "repeat": 100,
+      "delay": 100,
+      "move": false,
+      "x": 0,
+      "y": 0
+    }
+  ]
+}
