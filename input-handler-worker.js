@@ -1,4 +1,4 @@
-import { workerData, parentPort } from "node:worker_threads";
-import { click } from "./input-handler";
+import { workerData } from "node:worker_threads";
+import { sendInput } from "./input-handler.js";
 
-workerData.
+sendInput(workerData);

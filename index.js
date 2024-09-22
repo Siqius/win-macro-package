@@ -21,12 +21,16 @@ let params = {
 let worker;
 
 function terminateWorker() {
-  worker.terminate();
+  try{
+    worker.terminate();
+  }catch {}
 }
 
 export function input(obj) {
   terminateWorker();
+  /*
   worker = new Worker("./input-handler-worker.js", {
     workerData: obj
   });
+  */
 }
