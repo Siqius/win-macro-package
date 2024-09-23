@@ -53,4 +53,5 @@ export function input(obj) {
       console.error(`Worker stopped with exit code ${code}`);
     }
   });
+  console.log("Finished setting up worker");
 } 
