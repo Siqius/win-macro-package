@@ -4,8 +4,12 @@
       "target_name": "mouse-controller",
       "sources": ["main.cpp"],
       "include_dirs": [
+        "./node_modules/node-addon-api/",
         "<!(node -p \"require('node-addon-api').include\")",
         "."
+      ],
+      "dependencies": [
+        "<!(node -p \"require('node-addon-api').gyp\")"
       ],
       "cflags!": ["-fno-exceptions"],
       "cflags_cc!": ["-fno-exceptions"],

@@ -1,4 +1,4 @@
-#include <node.h>
+#include <napi.h>
 #include <windows.h>
 #include <winuser.h>
 #include <string>
@@ -10,14 +10,6 @@
 #include "nlohmann/json.hpp"
 using namespace nlohmann;
 using namespace std;
-
-using v8::FunctionCallbackInfo;
-using v8::Isolate;
-using v8::String;
-using v8::Local;
-using v8::Number;
-using v8::Exception;
-using v8::Value;
 
 int stringToVirtualKey(const std::string& keyName) {
   static const std::unordered_map<std::string, int> keyMap = {
@@ -139,33 +131,34 @@ int stringToVirtualKey(const std::string& keyName) {
   auto it = keyMap.find(keyName);
   return it->second;
 }
-void keyPress(const FunctionCallbackInfo<Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::String::Utf8Value str(isolate, args[0]);
-  std::string cppStr(*str);
-  json jsons = json::parse(cppStr);
 
+void keyPress(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  Napi::String arg0 = info[0].As<Napi::String>();
+  std::string cppStr = arg0.Utf8Value();
+  
+  json jsons = json::parse(cppStr);
   std::string key = jsons.value("key", "a");
   std::string type = jsons.value("type", "press");
-
 
   INPUT input;
   input.type = INPUT_KEYBOARD;
   input.ki.dwFlags = 0;
+  
   if (type == "release") {
     input.ki.dwFlags = KEYEVENTF_KEYUP;
   }
+
   input.ki.wVk = stringToVirtualKey(key);
-  SendInput(1,&input,sizeof(INPUT));
+  SendInput(1, &input, sizeof(INPUT));
 }
 
-
-void click(const FunctionCallbackInfo<Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::String::Utf8Value str(isolate, args[0]);
-  std::string cppStr(*str);
+Napi::Value click(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  Napi::String arg0 = info[0].As<Napi::String>();
+  std::string cppStr = arg0.Utf8Value();
+  
   json jsons = json::parse(cppStr);
-
   std::string button = jsons.value("button", "left");
   std::string type = jsons.value("type", "press");
   std::string movestr = jsons.value("move", "false");
@@ -174,63 +167,45 @@ void click(const FunctionCallbackInfo<Value>& args) {
 
   INPUT input;
   DWORD moveParam = MOUSEEVENTF_ABSOLUTE;
-  DWORD mouseAction;
-  DWORD xbutton;
+  DWORD mouseAction = 0;
+  DWORD xbutton = 0;
+  
   input.type = INPUT_MOUSE;
-  if(move) {
-    input.mi.dx = (65535 / GetSystemMetrics (SM_CXSCREEN)) * stoi(jsons.value("x","200"));
-    input.mi.dy = (65535 / GetSystemMetrics (SM_CXSCREEN)) * stoi(jsons.value("y","200"));
+
+  if (move) {
+    input.mi.dx = (65535 / GetSystemMetrics(SM_CXSCREEN)) * stoi(jsons.value("x", "200"));
+    input.mi.dy = (65535 / GetSystemMetrics(SM_CYSCREEN)) * stoi(jsons.value("y", "200"));
     moveParam = MOUSEEVENTF_MOVE;
   }
 
   if (button == "left") {
-    if (type == "press") {
-      mouseAction = MOUSEEVENTF_LEFTDOWN;
-    }
-    else if (type == "release") {
-      mouseAction = MOUSEEVENTF_LEFTUP;
-    }
+    mouseAction = (type == "press") ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
   }
   else if (button == "right") {
-    if (type == "press") {
-      mouseAction = MOUSEEVENTF_RIGHTDOWN;
-    }
-    else if (type == "release") {
-      mouseAction = MOUSEEVENTF_RIGHTUP;
-    }
+    mouseAction = (type == "press") ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
   }
   else if (button == "middle") {
-    if (type == "press") {
-      mouseAction = MOUSEEVENTF_MIDDLEDOWN;
-    }
-    else if (type == "release") {
-      mouseAction = MOUSEEVENTF_MIDDLEUP;
-    }
-  }
+    mouseAction = (type == "press") ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
+  } 
   else if (button == "mouse4" || button == "mouse5") {
-    if (button == "mouse4") {
-      xbutton = XBUTTON1;
-    } else {
-      xbutton = XBUTTON2;
-    }
-    if (type == "press") {
-      mouseAction = MOUSEEVENTF_XDOWN;
-    }
-    else if (type == "release") {
-      mouseAction = MOUSEEVENTF_XUP;
-    }
+    xbutton = (button == "mouse4") ? XBUTTON1 : XBUTTON2;
+    mouseAction = (type == "press") ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
   }
+
   input.mi.time = 0;
   input.mi.dwExtraInfo = NULL;
-  input.mi.dwFlags=(MOUSEEVENTF_ABSOLUTE|moveParam|mouseAction);
+  input.mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | moveParam | mouseAction);
   input.mi.mouseData = xbutton;
-  SendInput(1,&input,sizeof(INPUT));
+
+  SendInput(1, &input, sizeof(INPUT));
+
+  return env.Null();  // Return nothing
 }
 
-
-void Initialize(v8::Local<v8::Object> exports) {
-  NODE_SET_METHOD(exports, "click", click);
-  NODE_SET_METHOD(exports, "keyPress", keyPress);
+Napi::Object Initialize(Napi::Env env, Napi::Object exports) {
+  exports.Set(Napi::String::New(env, "click"), Napi::Function::New(env, click));
+  exports.Set(Napi::String::New(env, "keyPress"), Napi::Function::New(env, keyPress));
+  return exports;
 }
 
-NODE_MODULE(addon, Initialize);
+NODE_API_MODULE(addon, Initialize)
