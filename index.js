@@ -28,9 +28,8 @@ function terminateWorker() {
 
 export function input(obj) {
   terminateWorker();
-  /*
+
   worker = new Worker("./input-handler-worker.js", {
     workerData: obj
   });
-  */
 }
