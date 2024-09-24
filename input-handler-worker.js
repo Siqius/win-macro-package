@@ -17,8 +17,10 @@ async function sendInput(obj) {
       }
       if(input.inputType == "mouse") {
         addon.click(JSON.stringify(clickParams));
-      }else{
+      }else if(input.inputType == "keyboard") {
         addon.keyPress(JSON.stringify(clickParams));
+      }else if(input.inputType == "message") {
+        addon.write(JSON.stringify(clickParams));
       }
     };
   }

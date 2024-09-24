@@ -38,7 +38,7 @@ export default
       "inputType": "keyboard",
       "button": "a",
       "type": "release",
-      "delay": "100"
+      "delay": "10"
     },
     {
       "inputType": "keyboard",

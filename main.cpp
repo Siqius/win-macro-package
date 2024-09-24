@@ -164,6 +164,24 @@ Napi::Value keyPress(const Napi::CallbackInfo& info) {
   return env.Null();
 }
 
+Napi::Value write(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  Napi::String arg0 = info[0].As<Napi::String>();
+  std::string cppStr = arg0.Utf8Value();
+
+  json jsons = json::parse(cppStr);
+  std::string message = jsons.value("button", "a");
+  int16_t delay = stoi(jsons.value("delay", "10"));
+
+  // loop over message chars and send them using sendInput
+  /*
+    send keydown
+    delay 10ms
+    send keyup
+    delay (delay)
+  */
+}
+
 Napi::Value click(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::String arg0 = info[0].As<Napi::String>();
