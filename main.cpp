@@ -24,8 +24,8 @@ int stringToScanCode(const std::string& keyName) {
     {"alt", 0x38},
     {"pause", 0xC5},
     {"capslock", 0x3A},
-    {"esc", 0x01},
     {"space", 0x39},
+    {" ", 0x39},
     {"pageup", 0x49},
     {"pagedown", 0x51},
     {"end", 0x4F},
@@ -135,6 +135,18 @@ int stringToScanCode(const std::string& keyName) {
   return it->second;
 }
 
+Napi::Value sleep(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  Napi::String arg0 = info[0].As<Napi::String>();
+  std::string cppStr = arg0.Utf8Value();
+
+  json jsons = json::parse(cppStr);
+  int16_t initDelay = stoi(jsons.value("startDelay", "1000"));
+  Sleep(initDelay);
+  
+  return env.Null();
+}
+
 Napi::Value keyPress(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::String arg0 = info[0].As<Napi::String>();
@@ -157,9 +169,7 @@ Napi::Value keyPress(const Napi::CallbackInfo& info) {
 
   SendInput(1, &input, sizeof(INPUT));
 
-  cout << "sleeping" << endl;
   Sleep(delay);
-  cout << "not sleeping anymore" << endl;
 
   return env.Null();
 }
@@ -173,6 +183,24 @@ Napi::Value write(const Napi::CallbackInfo& info) {
   std::string message = jsons.value("button", "a");
   int16_t delay = stoi(jsons.value("delay", "10"));
 
+  for(int16_t i = 0; i < message.length(); i++) {
+    std::string key(1, message[i]);
+    INPUT input;
+    input.type = INPUT_KEYBOARD;
+    input.ki.wScan = stringToScanCode(key);
+    input.ki.dwFlags = KEYEVENTF_SCANCODE;
+
+    SendInput(1, &input, sizeof(INPUT));
+
+    Sleep(2);
+
+    INPUT inputUp;
+    inputUp.type = INPUT_KEYBOARD;
+    inputUp.ki.wScan = stringToScanCode(key);
+    inputUp.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+
+    Sleep(delay);
+  }
   // loop over message chars and send them using sendInput
   /*
     send keydown
@@ -180,6 +208,7 @@ Napi::Value write(const Napi::CallbackInfo& info) {
     send keyup
     delay (delay)
   */
+  return env.Null();
 }
 
 Napi::Value click(const Napi::CallbackInfo& info) {
@@ -237,6 +266,8 @@ Napi::Value click(const Napi::CallbackInfo& info) {
 Napi::Object Initialize(Napi::Env env, Napi::Object exports) {
   exports.Set(Napi::String::New(env, "click"), Napi::Function::New(env, click));
   exports.Set(Napi::String::New(env, "keyPress"), Napi::Function::New(env, keyPress));
+  exports.Set(Napi::String::New(env, "write"), Napi::Function::New(env, write));
+  exports.Set(Napi::String::New(env, "sleep"), Napi::Function::New(env, sleep));
   return exports;
 }
 

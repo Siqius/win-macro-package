@@ -1,0 +1,6 @@
+.vscode
+.gitignore
+clicktest.js
+jsontest.js
+main.cpp
+binding.gyp

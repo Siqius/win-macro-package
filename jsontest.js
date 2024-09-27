@@ -1,50 +1,36 @@
 export default
 {
   "repeat": 1,
+  "startDelay": "3000",
   "macro": [
     {
-      "inputType": "mouse",
-      "button": "left",
+      "inputType": "keyboard",
+      "button": "leftshift",
       "type": "press",
-      "delay": "2000",
-      "_comment": "below are only used for inputType: mouse",
-      "move": "false",
-      "x": 0,
-      "y": 0
+      "delay": "100"
     },
     {
-      "inputType": "mouse",
-      "button": "left",
-      "type": "release",
-      "delay": "2000",
-      "_comment": "below are only used for inputType: mouse",
-      "move": "false",
-      "x": 0,
-      "y": 0
+      "inputType": "write",
+      "button": "2",
+      "delay": "0"
     },
     {
       "inputType": "keyboard",
-      "button": "a",
+      "button": "leftshit",
+      "type": "release",
+      "delay": "100"
+    },
+    {
+      "inputType": "keyboard",
+      "button": "enter",
       "type": "press",
       "delay": "100"
     },
     {
       "inputType": "keyboard",
-      "button": "w",
-      "type": "press",
-      "delay": "3000"
-    },
-    {
-      "inputType": "keyboard",
-      "button": "a",
+      "button": "enter",
       "type": "release",
       "delay": "10"
     },
-    {
-      "inputType": "keyboard",
-      "button": "w",
-      "type": "release",
-      "delay": "100"
-    }
   ]
 }

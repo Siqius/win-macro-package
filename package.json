@@ -1,6 +1,6 @@
 {
-  "name": "mouse-controller-node-package",
-  "version": "1.0.0",
+  "name": "windows-input-controller",
+  "version": "1.0.3",
   "main": "index.js",
   "type": "module",
   "scripts": {
