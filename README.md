@@ -1,7 +1,8 @@
 # To use, run
 
 ```
-npm install windows-input-controller
+npm install node-addon-api
+npm install node-gyp
 ```
 
 # Available functions

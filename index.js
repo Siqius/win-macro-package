@@ -4,25 +4,33 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+let a = {
+  "mouse": {
+    "inputType": "mouse",
+    "button": "left",
+    "type": "press",
+    "delay": "1000",
+    "duration": "2000",
+    "steps": "100",
+    "move": "true",
+    "x": "200",
+    "y": "200"
+  },
 
-let inputType = "mouse"; // mouse / keyboard
-let button = "left"; // left / middle / right
-let type = "press"; // press / release
-let repeat = "-1"; // amount of times to repeat
-let delay = "200"; // delay between clicks (ms)
-let move = "false"; // move cursor to x, y
-let x = "200"; // x position
-let y = "200"; // y position
-let params = {
-  "inputType": inputType,
-  "button": button,
-  "type": type,
-  "repeat": repeat,
-  "delay": delay,
-  "move": move,
-  "x": x,
-  "y": y
-};
+  "keyboard": {
+    "inputType": "keyboard",
+    "button": "a",
+    "type": "press",
+    "delay": "1000",
+  },
+
+  "write": {
+    "inputType": "write",
+    "button": "hellooooo",
+    "delay": "1000",
+    "duration": "1000"
+  }
+}
 
 let worker;
 

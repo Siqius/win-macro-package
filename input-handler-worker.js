@@ -6,7 +6,6 @@ async function sendInput(obj) {
   const repeat = obj.repeat;
   const macro = obj.macro;
   const startDelay = obj.startDelay;
-  parentPort.postMessage("a")
   addon.sleep(JSON.stringify({
     "startDelay": startDelay
   }))
@@ -17,6 +16,8 @@ async function sendInput(obj) {
         "button": input.button,
         "type": input.type,
         "delay": delay,
+        "duration": input.duration,
+        "steps": input.steps,
         "move": input.move,
         "x": input.x,
         "y": input.y
@@ -27,6 +28,8 @@ async function sendInput(obj) {
         addon.keyPress(JSON.stringify(clickParams));
       }else if(input.inputType == "write") {
         addon.write(JSON.stringify(clickParams));
+      }else if(input.inputType == "move") {
+        addon.moveMouse(JSON.stringify(clickParams));
       }
     };
   }
