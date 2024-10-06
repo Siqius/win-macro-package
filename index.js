@@ -10,7 +10,7 @@ let a = {
     "button": "left",
     "type": "press",
     "delay": "1000",
-    "duration": "2000",
+    "duration": "2000", // duration/steps recommended less than ~ 16
     "steps": "100",
     "move": "true",
     "x": "200",
@@ -26,29 +26,38 @@ let a = {
 
   "write": {
     "inputType": "write",
-    "button": "hellooooo",
+    "button": "hellooooo", 
     "delay": "1000",
-    "duration": "1000"
+    "duration": "1000" // duration/message length recommended less than ~ 16
+  },
+
+  "move": {
+    "inputType": "move",
+    "delay": "1000",
+    "duration": "1000", // duration/steps recommended less than ~ 16
+    "steps": "50",
+    "x": "200",
+    "y": "200"
   }
 }
 
 let worker;
 
-function terminateWorker() {
+function stop() {
   try{
     worker.terminate();
     console.log("Worker terminated.")
   }catch {}
 }
 
-export function input(obj) {
+export function start(obj) {
   console.log("starting");
   worker = new Worker(path.resolve(__dirname, './input-handler-worker.js'), {
     workerData: obj
   });
   worker.on("message", (message) => {
     if(message == "terminate") {
-      terminateWorker();
+      stop();
       return;
     }
     console.log(message);
