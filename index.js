@@ -43,7 +43,7 @@ let a = {
 
 let worker;
 
-function stop() {
+export function stop() {
   try{
     worker.terminate();
     console.log("Worker terminated.")
