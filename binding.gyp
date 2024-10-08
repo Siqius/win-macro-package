@@ -6,6 +6,7 @@
       "include_dirs": [
         "./node_modules/node-addon-api/",
         "<!(node -p \"require('node-addon-api').include\")",
+        "<!@(node -p \"require('node-addon-api').include\")",
         "."
       ],
       "dependencies": [
@@ -13,6 +14,9 @@
       ],
       "cflags!": ["-fno-exceptions"],
       "cflags_cc!": ["-fno-exceptions"],
+      "msvs_settings": {
+        "VCCLCompilerTool": { "ExceptionHandling": 1 }
+      },
       "conditions": [
         ["OS=='mac'", {
           "xcode_settings": {

@@ -1,7 +1,7 @@
 {
   "name": "windows-input-controller",
-  "version": "1.0.5",
-  "main": "index.js",
+  "version": "1.1.0",
+  "main": "index",
   "type": "module",
   "scripts": {
     "build": "node-gyp clean configure build"
@@ -18,7 +18,7 @@
   "homepage": "https://github.com/Siqius/mouse-controller-node-addon#readme",
   "description": "",
   "dependencies": {
-    "node-addon-api": "^8.1.0",
+    "node-addon-api": "^8.2.0",
     "node-gyp": "^10.2.0"
   }
 }
