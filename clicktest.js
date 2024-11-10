@@ -7,12 +7,12 @@ start({
   "startDelay": "3000",
   "macro": [
     {
-      "inputType": "move",
-      "delay": "10",
-      "duration": "2000",
-      "steps": "100",
-      "x": "100",
-      "y": "100"
+      "inputType": "move", // 
+      "delay": "10", // default 100
+      "duration": "2000", // default 1000
+      "steps": "100", // default 100
+      "x": "100", // default 200
+      "y": "100" //default 200
     }
   ]
 });

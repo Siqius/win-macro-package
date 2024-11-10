@@ -169,6 +169,10 @@ Napi::Value sleep(const Napi::CallbackInfo& info) {
   return env.Null();
 }
 
+Napi::Value getKey(const Napi::CallbackInfo& info) {
+  
+}
+
 Napi::Value keyPress(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
   Napi::String arg0 = info[0].As<Napi::String>();

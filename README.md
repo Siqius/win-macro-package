@@ -8,15 +8,30 @@ npm install node-gyp
 # Available functions
 
 ```
-input
+start(
+
+)
+stop()
+```
+
+# Object parameters
+
+```
+| Key           | Type          |Description |Required|
+| ------------- |:-------------:|:----------:|:------:|
+| inputType     | string        |            |   Yes  |
+| left bar      | string        |            |   No   |
+| left baz      | string        |            |        |
 ```
 
 # Param inputs
+
 Example of input
+
 ```
 JSON.stringify({
-"repeat": 1, (-1 for infinite)
-"startDelay": "3000",
+"repeat": 1, //-1 for infinite, default 1 if not specified
+"startDelay": "3000", //
 "macro": [
   {
     "inputType": "keyboard",
@@ -68,6 +83,7 @@ mouse5
 ```
 
 Available keyboard buttons
+
 ```
 backspace
 tab

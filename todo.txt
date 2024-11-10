@@ -1,0 +1,5 @@
+rethink structure of index.js, (  move(params), pressKey(params), etc instead of start(obj)  )
+
+finish README.md
+
+recording a macro
