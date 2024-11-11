@@ -16,13 +16,11 @@ stop()
 
 # Object parameters
 
-```
-| Key           | Type          |Description |Required|
-| ------------- |:-------------:|:----------:|:------:|
-| inputType     | string        |            |   Yes  |
-| left bar      | string        |            |   No   |
-| left baz      | string        |            |        |
-```
+| Key        |  Type  | Description | Required |
+| ---------- | :----: | :---------: | :------: |
+| inputType  | string |             |   Yes    |
+| delay (ms) | string |             |    No    |
+| button     | string |             |    No    |
 
 # Param inputs
 
