@@ -1,5 +1,9 @@
-rethink structure of index.js, (  move(params), pressKey(params), etc instead of start(obj)  )
-
 finish README.md
 
 recording a macro
+
+add scrolling support
+
+
+WH_KEYBOARD_LL
+WH_MOUSE_LL

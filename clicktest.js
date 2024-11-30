@@ -2,6 +2,9 @@ const addon = await import('module').then(m => m.createRequire(import.meta.url)(
 import obj from "./jsontest.js";
 import { start } from "./index.js";
 
+start();
+
+/*
 start({
   "repeat": 1,
   "startDelay": "3000",
@@ -16,3 +19,4 @@ start({
     }
   ]
 });
+*/

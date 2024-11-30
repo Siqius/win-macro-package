@@ -13,26 +13,41 @@
 using namespace nlohmann;
 using namespace std;
 
+bool recording = false;
+
+std::string stop;
+
+
+HHOOK mouseHook;
+
+LRESULT CALLBACK mouseHookCallback(int nCode, WPARAM wParam, LPARAM lParam)
+{
+  if (nCode >= 0) {
+    cout << nCode;
+  }
+
+  return CallNextHookEx(NULL, nCode, wParam, lParam);
+}
+
 void SmoothMoveMouse(int targetX, int targetY, int duration, int steps)
 {
-    POINT currentPos;
-    GetCursorPos(&currentPos);
-    int16_t startX = currentPos.x;
-    int16_t startY = currentPos.y;
-    int16_t deltaX = targetX - startX;
-    int16_t deltaY = targetY - startY;
-    int16_t sleepTime = duration / steps / 5;
-    for (int i = 1; i <= steps; i++)
-    {
-        int newX = startX + (deltaX * i) / steps;
-        int newY = startY + (deltaY * i) / steps;
-        SetCursorPos(newX, newY);
-        cout << "sleeping for " << sleepTime << " ms" <<  endl;
-        cout << i << endl;
-        Sleep(sleepTime);
-        //https://chatgpt.com/c/66fb1265-8fe4-8007-94ff-2260b8bc0cf4
-    }
-    SetCursorPos(targetX, targetY);
+  POINT currentPos;
+  GetCursorPos(&currentPos);
+  int16_t startX = currentPos.x;
+  int16_t startY = currentPos.y;
+  int16_t deltaX = targetX - startX;
+  int16_t deltaY = targetY - startY;
+  int16_t sleepTime = duration / steps / 5;
+  for (int i = 1; i <= steps; i++)
+  {
+    int newX = startX + (deltaX * i) / steps;
+    int newY = startY + (deltaY * i) / steps;
+    SetCursorPos(newX, newY);
+    cout << "sleeping for " << sleepTime << " ms" <<  endl;
+    cout << i << endl;
+    Sleep(sleepTime);
+  }
+  SetCursorPos(targetX, targetY);
 }
 
 int stringToScanCode(const std::string& keyName) {
@@ -169,8 +184,18 @@ Napi::Value sleep(const Napi::CallbackInfo& info) {
   return env.Null();
 }
 
-Napi::Value getKey(const Napi::CallbackInfo& info) {
-  
+Napi::Value record(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
+  Napi::String arg0 = info[0].As<Napi::String>();
+  std::string cppStr = arg0.Utf8Value();
+
+  cout << "hello";
+  json jsons = json::parse(cppStr);
+  stop = jsons.value("stop", "a");
+
+  mouseHook = SetWindowsHookExA(WH_KEYBOARD_LL, mouseHookCallback, NULL, 0);
+
+  return env.Null();
 }
 
 Napi::Value keyPress(const Napi::CallbackInfo& info) {
@@ -310,6 +335,7 @@ Napi::Object Initialize(Napi::Env env, Napi::Object exports) {
   exports.Set(Napi::String::New(env, "write"), Napi::Function::New(env, write));
   exports.Set(Napi::String::New(env, "moveMouse"), Napi::Function::New(env, moveMouse));
   exports.Set(Napi::String::New(env, "sleep"), Napi::Function::New(env, sleep));
+  exports.Set(Napi::String::New(env, "record"), Napi::Function::New(env, record));
   return exports;
 }
 

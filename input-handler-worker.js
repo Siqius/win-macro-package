@@ -3,14 +3,18 @@ import { start } from "node:repl";
 import { workerData, parentPort } from "node:worker_threads";
 
 async function sendInput(obj) {
+  addon.record(JSON.stringify({
+    "stop": "a"
+  }));
+  return;
   const repeat = obj.repeat;
   const macro = obj.macro;
   const startDelay = obj.startDelay;
   addon.sleep(JSON.stringify({
     "startDelay": startDelay
   }))
-  for(let i = 0; i != repeat; i++) {
-    for(const input of macro) {
+  for (let i = 0; i != repeat; i++) {
+    for (const input of macro) {
       let delay = parseInt(input.delay) >= 5 ? input.delay : "5";
       let clickParams = {
         "button": input.button,
@@ -22,13 +26,13 @@ async function sendInput(obj) {
         "x": input.x,
         "y": input.y
       }
-      if(input.inputType == "mouse") {
+      if (input.inputType == "mouse") {
         addon.click(JSON.stringify(clickParams));
-      }else if(input.inputType == "keyboard") {
+      } else if (input.inputType == "keyboard") {
         addon.keyPress(JSON.stringify(clickParams));
-      }else if(input.inputType == "write") {
+      } else if (input.inputType == "write") {
         addon.write(JSON.stringify(clickParams));
-      }else if(input.inputType == "move") {
+      } else if (input.inputType == "move") {
         addon.moveMouse(JSON.stringify(clickParams));
       }
     };
