@@ -55,7 +55,7 @@ export function textToJson(text) {
     ]
   };
 
-  valid_keyboard_keys = [
+  let valid_keyboard_keys = [
     "backspace",
     "tab",
     "clear",
@@ -170,7 +170,7 @@ export function textToJson(text) {
     "launhapp2"
   ];
 
-  valid_mouse_keys = [
+  let valid_mouse_keys = [
     "left",
     "right",
     "middle",
@@ -178,7 +178,7 @@ export function textToJson(text) {
     "mouse5"
   ];
 
-  types = [
+  let types = [
     "press",
     "release"
   ];
