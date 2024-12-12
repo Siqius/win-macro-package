@@ -20,9 +20,9 @@ async function sendInput(obj) {
         "y": input.y,
         "delay": delay,
       }
-      if (input.inputType == "mouse") {
+      if (input.inputType == "click") {
         addon.click(JSON.stringify(clickParams));
-      } else if (input.inputType == "keyboard") {
+      } else if (input.inputType == "key") {
         addon.keyPress(JSON.stringify(clickParams));
       } else if (input.inputType == "write") {
         addon.write(JSON.stringify(clickParams));
