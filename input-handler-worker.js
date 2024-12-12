@@ -12,14 +12,13 @@ async function sendInput(obj) {
     for (const input of macro) {
       let delay = parseInt(input.delay) >= 5 ? input.delay : "5";
       let clickParams = {
-        "button": input.button,
         "type": input.type,
-        "delay": delay,
+        "key": input.key,
         "duration": input.duration,
         "steps": input.steps,
-        "move": input.move,
         "x": input.x,
-        "y": input.y
+        "y": input.y,
+        "delay": delay,
       }
       if (input.inputType == "mouse") {
         addon.click(JSON.stringify(clickParams));

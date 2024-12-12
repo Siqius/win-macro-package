@@ -292,7 +292,7 @@ LRESULT CALLBACK keyboardHookCallback(int nCode, WPARAM wParam, LPARAM lParam) {
     }else { 
       std::unordered_map<std::string, std::string> toPush = {
         {"inputType", "keyboard"},
-        {"button", key},
+        {"key", key},
         {"type", status},
         {"delay", ""}
       };
@@ -376,7 +376,7 @@ Napi::Value keyPress(const Napi::CallbackInfo& info) {
 
   
   json jsons = json::parse(cppStr);
-  std::string key = jsons.value("button", "a");
+  std::string key = jsons.value("key", "a");
   std::string type = jsons.value("type", "press");
   int16_t delay = stoi(jsons.value("delay", "10"));
 
@@ -402,7 +402,7 @@ Napi::Value write(const Napi::CallbackInfo& info) {
   std::string cppStr = arg0.Utf8Value();
 
   json jsons = json::parse(cppStr);
-  std::string message = jsons.value("button", "a");
+  std::string message = jsons.value("key", "a");
   int16_t delay = stoi(jsons.value("delay", "10"));
   int16_t duration = stoi(jsons.value("duration", "1000"));
 
@@ -457,7 +457,7 @@ Napi::Value click(const Napi::CallbackInfo& info) {
   std::string cppStr = arg0.Utf8Value();
   
   json jsons = json::parse(cppStr);
-  std::string button = jsons.value("button", "left");
+  std::string key = jsons.value("key", "left");
   std::string type = jsons.value("type", "press");
   int16_t delay = stoi(jsons.value("delay", "10"));
   int16_t duration = stoi(jsons.value("duration", "10000"));
@@ -474,11 +474,11 @@ Napi::Value click(const Napi::CallbackInfo& info) {
   
   input.type = INPUT_MOUSE;
 
-  if (button == "left") mouseAction = (type == "press") ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
-  else if (button == "right") mouseAction = (type == "press") ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
-  else if (button == "middle") mouseAction = (type == "press") ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
-  else if (button == "mouse4" || button == "mouse5") {
-    xbutton = (button == "mouse4") ? XBUTTON1 : XBUTTON2;
+  if (key == "left") mouseAction = (type == "press") ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP;
+  else if (key == "right") mouseAction = (type == "press") ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP;
+  else if (key == "middle") mouseAction = (type == "press") ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP;
+  else if (key == "mouse4" || key == "mouse5") {
+    xbutton = (key == "mouse4") ? XBUTTON1 : XBUTTON2;
     mouseAction = (type == "press") ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP;
   }
 
