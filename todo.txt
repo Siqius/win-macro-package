@@ -1,9 +1,6 @@
 finish README.md
 
-recording a macro
+recording a macro (ongoing)
+  add recorded keys to map
 
 add scrolling support
-
-
-WH_KEYBOARD_LL
-WH_MOUSE_LL

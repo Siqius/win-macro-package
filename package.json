@@ -1,6 +1,6 @@
 {
-  "name": "windows-input-controller",
-  "version": "1.1.0",
+  "name": "win-macro",
+  "version": "1.0.1",
   "main": "index",
   "type": "module",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Siqius/mouse-controller-node-addon.git"
+    "url": "git+https://github.com/Siqius/win-macro.git"
   },
   "author": "Siqius",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Siqius/mouse-controller-node-addon/issues"
+    "url": "https://github.com/Siqius/win-macro/issues"
   },
-  "homepage": "https://github.com/Siqius/mouse-controller-node-addon#readme",
+  "homepage": "https://github.com/Siqius/win-macro#readme",
   "description": "",
   "dependencies": {
     "node-addon-api": "^8.1.0",

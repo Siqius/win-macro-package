@@ -1,12 +1,7 @@
 const addon = await import('module').then(m => m.createRequire(import.meta.url)('./build/Release/mouse-controller.node'));
-import { start } from "node:repl";
 import { workerData, parentPort } from "node:worker_threads";
 
 async function sendInput(obj) {
-  addon.record(JSON.stringify({
-    "stop": "a"
-  }));
-  return;
   const repeat = obj.repeat;
   const macro = obj.macro;
   const startDelay = obj.startDelay;

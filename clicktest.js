@@ -2,7 +2,7 @@ const addon = await import('module').then(m => m.createRequire(import.meta.url)(
 import obj from "./jsontest.js";
 import { start } from "./index.js";
 
-start();
+start(obj);
 
 /*
 start({
