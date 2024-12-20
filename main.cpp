@@ -291,7 +291,7 @@ LRESULT CALLBACK keyboardHookCallback(int nCode, WPARAM wParam, LPARAM lParam) {
       PostMessage(NULL, 100, 0, 0);
     }else { 
       std::unordered_map<std::string, std::string> toPush = {
-        {"inputType", "keyboard"},
+        {"inputType", "key"},
         {"key", key},
         {"type", status},
         {"delay", ""}
@@ -314,15 +314,15 @@ LRESULT CALLBACK keyboardHookCallback(int nCode, WPARAM wParam, LPARAM lParam) {
   return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 }
 
-void SmoothMoveMouse(int targetX, int targetY, int duration, int steps)
+void SmoothMoveMouse(int targetX, int targetY, int duration, int steps, int relative)
 {
   POINT currentPos;
   GetCursorPos(&currentPos);
   int16_t startX = currentPos.x;
   int16_t startY = currentPos.y;
-  int16_t deltaX = targetX - startX;
-  int16_t deltaY = targetY - startY;
-  int16_t sleepTime = duration / steps;
+  int16_t deltaX = relative ? targetX + startX : targetX - startX;
+  int16_t deltaY = relative ? targetY + startY : targetY - startY;
+  int32_t sleepTime = duration / steps;
   for (int i = 1; i <= steps; i++) {
     auto start = std::chrono::system_clock::now();
     int newX = startX + (deltaX * i) / steps;
@@ -343,7 +343,7 @@ Napi::Value sleep(const Napi::CallbackInfo& info) {
   std::string cppStr = arg0.Utf8Value();
 
   json jsons = json::parse(cppStr);
-  int16_t initDelay = stoi(jsons.value("startDelay", "1000"));
+  int64_t initDelay = stoi(jsons.value("startDelay", "1000"));
   Sleep(initDelay);
   
   return env.Null();
@@ -378,7 +378,7 @@ Napi::Value keyPress(const Napi::CallbackInfo& info) {
   json jsons = json::parse(cppStr);
   std::string key = jsons.value("key", "a");
   std::string type = jsons.value("type", "press");
-  int16_t delay = stoi(jsons.value("delay", "10"));
+  int64_t delay = stoi(jsons.value("delay", "10"));
 
   INPUT input;
   input.type = INPUT_KEYBOARD;
@@ -403,7 +403,7 @@ Napi::Value write(const Napi::CallbackInfo& info) {
 
   json jsons = json::parse(cppStr);
   std::string message = jsons.value("key", "a");
-  int16_t delay = stoi(jsons.value("delay", "10"));
+  int64_t delay = stoi(jsons.value("delay", "10"));
   int16_t duration = stoi(jsons.value("duration", "1000"));
 
   int16_t sleepTime = duration / message.length();
@@ -432,19 +432,23 @@ Napi::Value write(const Napi::CallbackInfo& info) {
   return env.Null();
 }
 
-Napi::Value moveMouse(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
+Napi::Value move(const Napi::Callbackinfo& info) {
+  Napi::env env = ingo.Env();
   Napi::String arg0 = info[0].As<Napi::String>();
   std::string cppStr = arg0.Utf8Value();
 
   json jsons = json::parse(cppStr);
-  int16_t delay = stoi(jsons.value("delay", "100"));
-  int16_t duration = stoi(jsons.value("duration", "1000"));
+  int64_t delay = stoi(jsons.value("delay", "100"));
+  int64_t duration = stoi(jsons.value("duration", "1000"));
   int16_t steps = stoi(jsons.value("steps", "100"));
   int16_t x = stoi(jsons.value("x", "200"));
   int16_t y = stoi(jsons.value("y", "200"));
+  
+  std::string relativestr = jsons.value("relative", "false");
+  bool relative;
+  std::istringstream(relativestr) >> std::boolalpha >> relative;
 
-  SmoothMoveMouse(x, y, duration, steps);
+  SmoothMoveMouse(x, y, duration, steps, relative);
 
   Sleep(delay);
 
@@ -459,14 +463,7 @@ Napi::Value click(const Napi::CallbackInfo& info) {
   json jsons = json::parse(cppStr);
   std::string key = jsons.value("key", "left");
   std::string type = jsons.value("type", "press");
-  int16_t delay = stoi(jsons.value("delay", "10"));
-  int16_t duration = stoi(jsons.value("duration", "10000"));
-  int16_t steps = stoi(jsons.value("steps", "100"));
-  int16_t x = stoi(jsons.value("x", "200"));
-  int16_t y = stoi(jsons.value("y", "200"));
-  std::string movestr = jsons.value("move", "false");
-  bool move;
-  std::istringstream(movestr) >> std::boolalpha >> move;
+  int64_t delay = stoi(jsons.value("delay", "10"));
 
   INPUT input;
   DWORD mouseAction = 0;
@@ -487,10 +484,6 @@ Napi::Value click(const Napi::CallbackInfo& info) {
   input.mi.dwFlags = (mouseAction);
   input.mi.mouseData = xbutton;
 
-  if(move) {
-    SmoothMoveMouse(x, y, duration, steps);
-  }
-
   SendInput(1, &input, sizeof(INPUT));
 
   Sleep(delay);
@@ -502,7 +495,7 @@ Napi::Object Initialize(Napi::Env env, Napi::Object exports) {
   exports.Set(Napi::String::New(env, "click"), Napi::Function::New(env, click));
   exports.Set(Napi::String::New(env, "keyPress"), Napi::Function::New(env, keyPress));
   exports.Set(Napi::String::New(env, "write"), Napi::Function::New(env, write));
-  exports.Set(Napi::String::New(env, "moveMouse"), Napi::Function::New(env, moveMouse));
+  exports.Set(Napi::String::New(env, "move"), Napi::Function::New(env, move));
   exports.Set(Napi::String::New(env, "sleep"), Napi::Function::New(env, sleep));
   //exports.Set(Napi::String::New(env, "record"), Napi::Function::New(env, record));
   return exports;

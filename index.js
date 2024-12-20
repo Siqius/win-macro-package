@@ -13,10 +13,10 @@ export function stop() {
   } catch { }
 }
 
-export function start(obj) {
+export function start(obj, eventEmitter) {
   console.log("starting");
   worker = new Worker(path.resolve(__dirname, './input-handler-worker.js'), {
-    workerData: obj
+    workerData: [obj, eventEmitter]
   });
   worker.on("message", (message) => {
     if (message == "terminate") {
@@ -188,7 +188,7 @@ export function textToJson(text) {
     if (action[0].toLowerCase() == "click") {
 
       if (!(valid_mouse_keys.includes(action[1].toLowerCase()))) {
-        err(`Mouse button is invalid on line ${i + 1}`);
+        err(`Mouse key is invalid on line ${i + 1}`);
       }
 
       if (!(types.includes(action[2].toLowerCase()))) {
@@ -207,7 +207,7 @@ export function textToJson(text) {
 
       obj.macro.push({
         "inputType": action[0],
-        "button": action[1],
+        "key": action[1],
         "type": action[2],
         "delay": action[3]
       });
@@ -216,7 +216,7 @@ export function textToJson(text) {
     else if (action[0].toLowerCase() == "key") {
 
       if (!(valid_keyboard_keys.includes(action[1].toLowerCase()))) {
-        err(`Mouse button is invalid on line ${i + 1}`);
+        err(`Keyboard key is invalid on line ${i + 1}`);
       }
 
       if (!(types.includes(action[2].toLowerCase()))) {
@@ -235,7 +235,7 @@ export function textToJson(text) {
 
       obj.macro.push({
         "inputType": action[0],
-        "button": action[1],
+        "key": action[1],
         "type": action[2],
         "delay": action[3]
       });
@@ -265,9 +265,9 @@ export function textToJson(text) {
 
       obj.macro.push({
         "inputType": action[0],
-        "message": action[1],
-        "duration": action[2],
-        "delay": action[3]
+        "key": action.slice(1, action.length - 2),
+        "duration": action[action.length - 2],
+        "delay": action[action.length - 1]
       });
     }
 
@@ -382,7 +382,7 @@ export function textToJson(text) {
 export function jsonToText(json) {
   let text = `${json.repeat};${json.startDelay};`;
   json.macro.forEach(action => {
-    let snippet = `${action.inputType} ${action.x || ""} ${action.button || ""} ${action.message || ""} ${action.y || ""} ${action.type || ""} ${action.duration || ""} ${action.steps || ""} ${action.delay};`;
+    let snippet = `${action.inputType} ${action.x || ""} ${action.key || ""} ${action.message || ""} ${action.y || ""} ${action.type || ""} ${action.duration || ""} ${action.steps || ""} ${action.delay};`;
     text += snippet;
   });
 
