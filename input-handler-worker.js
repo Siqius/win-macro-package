@@ -3,9 +3,9 @@ import { workerData, parentPort } from "node:worker_threads";
 
 function sendInput(obj) {
   //gather the data from obj
-  const repeat = obj[0].repeat;
-  const macro = obj[0].macro;
-  const startDelay = obj[0].startDelay;
+  const repeat = obj.repeat;
+  const macro = obj.macro;
+  const startDelay = obj.startDelay;
   addon.sleep(JSON.stringify({
     "startDelay": startDelay
   }))
@@ -37,8 +37,7 @@ function sendInput(obj) {
       }
     }
   }
+  parentPort.postMessage({ event: "Worker finished" });
 }
 
 sendInput(workerData);
-
-obj[1].emit("Worker finished"); // send message for when worker is finished

@@ -16,7 +16,7 @@ export function stop() {
 export function start(obj, eventEmitter) {
   console.log("starting");
   worker = new Worker(path.resolve(__dirname, './input-handler-worker.js'), {
-    workerData: [obj, eventEmitter]
+    workerData: obj,
   });
   worker.on("message", (message) => {
     if (message == "terminate") {
@@ -33,6 +33,11 @@ export function start(obj, eventEmitter) {
       console.error(`Worker stopped with exit code ${code}`);
     }
   });
+  worker.on("message", (message) => {
+    if (message.event === "Worker finished") {
+      eventEmitter.emit("Worker finished"); // send message for when worker is finished
+    }
+  })
   console.log("Finished setting up worker");
 }
 
