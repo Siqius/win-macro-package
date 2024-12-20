@@ -432,8 +432,8 @@ Napi::Value write(const Napi::CallbackInfo& info) {
   return env.Null();
 }
 
-Napi::Value move(const Napi::Callbackinfo& info) {
-  Napi::env env = ingo.Env();
+Napi::Value move(const Napi::CallbackInfo& info) {
+  Napi::Env env = info.Env();
   Napi::String arg0 = info[0].As<Napi::String>();
   std::string cppStr = arg0.Utf8Value();
 

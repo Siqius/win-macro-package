@@ -1,7 +1,7 @@
 const addon = await import('module').then(m => m.createRequire(import.meta.url)('./build/Release/mouse-controller.node'));
 import { workerData, parentPort } from "node:worker_threads";
 
-async function sendInput(obj) {
+function sendInput(obj) {
   //gather the data from obj
   const repeat = obj[0].repeat;
   const macro = obj[0].macro;
@@ -37,7 +37,8 @@ async function sendInput(obj) {
       }
     }
   }
-  obj[1].emit("Worker finished"); // send message for when worker is finished
 }
 
 sendInput(workerData);
+
+obj[1].emit("Worker finished"); // send message for when worker is finished
