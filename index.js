@@ -34,8 +34,8 @@ export function start(obj, eventEmitter) {
     }
   });
   worker.on("message", (message) => {
-    if (message.event === "Worker finished") {
-      eventEmitter.emit("Worker finished"); // send message for when worker is finished
+    if (message == "worker finished") {
+      eventEmitter.emit("Worker-finished"); // send message for when worker is finished
     }
   })
   console.log("Finished setting up worker");
@@ -270,7 +270,7 @@ export function textToJson(text) {
 
       obj.macro.push({
         "inputType": action[0],
-        "key": action.slice(1, action.length - 2),
+        "key": action.slice(1, action.length - 2).toString().replaceAll(",", " "),
         "duration": action[action.length - 2],
         "delay": action[action.length - 1]
       });

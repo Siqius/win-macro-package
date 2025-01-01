@@ -1,6 +1,6 @@
 {
   "name": "win-macro",
-  "version": "1.6.0",
+  "version": "2.1.0",
   "main": "index",
   "type": "module",
   "scripts": {

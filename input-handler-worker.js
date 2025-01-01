@@ -37,7 +37,7 @@ function sendInput(obj) {
       }
     }
   }
-  parentPort.postMessage({ event: "Worker finished" });
+  parentPort.postMessage("worker finished");
 }
 
 sendInput(workerData);

@@ -424,6 +424,8 @@ Napi::Value write(const Napi::CallbackInfo& info) {
     inputUp.ki.wScan = stringToScanCode(key);
     inputUp.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
 
+    SendInput(1, &inputUp, sizeof(INPUT));
+
     Sleep(sleepTime);
   }
 
